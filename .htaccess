@@ -1,0 +1,30 @@
+# Root deployment guard:
+# If you upload the entire project, force all public traffic to dist/ only.
+
+Options -MultiViews
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Do not rewrite requests that already target dist/
+  RewriteCond %{REQUEST_URI} !^/dist/
+
+  # Serve file/dir from dist if it exists
+  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -f [OR]
+  RewriteCond %{DOCUMENT_ROOT}/dist/$1 -d
+  RewriteRule ^(.*)$ /dist/$1 [L]
+
+  # SPA fallback: serve built app shell from dist
+  RewriteCond %{REQUEST_URI} !^/dist/
+  RewriteRule ^.*$ /dist/index.html [L]
+</IfModule>
+
+# Block common sensitive files if they are requested directly
+<FilesMatch "^(package(-lock)?\.json|vite\.config\.js|eslint\.config\.js|\.prettierrc)$">
+  Require all denied
+</FilesMatch>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+</IfModule>
