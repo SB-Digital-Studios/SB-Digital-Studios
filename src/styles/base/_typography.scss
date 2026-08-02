@@ -1,0 +1,53 @@
+@use '../abstracts/mixins' as *;
+@use '../abstracts/variables' as *;
+
+body {
+  font-family: $font-primary;
+  color: var(--color-text);
+}
+
+.type-display-xl {
+  @include fluid-type(48, 96, $line: 0.95, $weight: 750);
+  letter-spacing: -0.03em;
+}
+
+.type-display-lg {
+  @include fluid-type(40, 72, $line: 1, $weight: 700);
+  letter-spacing: -0.025em;
+}
+
+.type-h1 {
+  @include fluid-type(36, 56, $line: 1.08, $weight: 700);
+  letter-spacing: -0.02em;
+}
+
+.type-h2 {
+  @include fluid-type(30, 44, $line: 1.15, $weight: 680);
+  letter-spacing: -0.015em;
+}
+
+.type-h3 {
+  @include fluid-type(24, 34, $line: 1.2, $weight: 650);
+}
+
+.type-h4 {
+  @include fluid-type(20, 26, $line: 1.24, $weight: 640);
+}
+
+.type-body-lg {
+  @include fluid-type(18, 22, $line: 1.6, $weight: 500);
+}
+
+.type-body {
+  @include fluid-type(16, 18, $line: 1.65, $weight: 450);
+}
+
+.type-small {
+  @include fluid-type(14, 16, $line: 1.5, $weight: 500);
+}
+
+.type-caption {
+  @include fluid-type(12, 14, $line: 1.4, $weight: 560);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}

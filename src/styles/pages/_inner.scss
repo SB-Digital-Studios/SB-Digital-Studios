@@ -1,0 +1,20 @@
+@use '../abstracts/mixins' as *;
+@use '../abstracts/functions' as *;
+
+.page-hero {
+  @include section-spacing(72, 120);
+  background: linear-gradient(140deg, #0f172a, #1e3a8a 60%, #2563eb);
+  color: var(--color-surface);
+}
+
+.page-hero__inner {
+  max-width: 70ch;
+}
+
+.page-hero .section-label {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.page-hero .section-copy {
+  color: rgba(255, 255, 255, 0.84);
+}

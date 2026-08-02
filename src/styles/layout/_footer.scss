@@ -1,0 +1,31 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+
+.footer {
+  @include section-spacing(48, 80);
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.footer__grid {
+  @include fluid-container();
+  display: grid;
+  gap: fluid-space(24, 40);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+
+.footer a {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.footer a:focus-visible {
+  @include focus-ring;
+}
+
+.footer__legal {
+  @include fluid-container();
+  margin-top: fluid-space(24, 34);
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  padding-top: fluid-space(14, 22);
+  color: rgba(255, 255, 255, 0.72);
+}

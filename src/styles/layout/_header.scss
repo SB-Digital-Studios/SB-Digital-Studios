@@ -1,0 +1,37 @@
+@use '../abstracts/functions' as *;
+@use '../abstracts/mixins' as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  padding-block: fluid-space(10, 16);
+  transition: background var(--transition-base), box-shadow var(--transition-base);
+}
+
+.header--scrolled {
+  background: rgba(248, 250, 252, 0.8);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 1px 0 rgba(15, 23, 42, 0.06);
+}
+
+.header__inner {
+  @include fluid-container();
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.header__logo-mark {
+  display: block;
+  inline-size: 2.5rem;
+  block-size: auto;
+  object-fit: contain;
+}

@@ -1,0 +1,9 @@
+@use 'sass:math';
+
+@function to-rem($px) {
+  @return math.div($px, 16) * 1rem;
+}
+
+@function fluid-space($min, $max, $min-vw: 320, $max-vw: 1600) {
+  @return clamp(#{to-rem($min)}, calc(#{to-rem($min)} + (#{$max - $min}) * (100vw - #{to-rem($min-vw)}) / (#{$max-vw - $min-vw})), #{to-rem($max)});
+}

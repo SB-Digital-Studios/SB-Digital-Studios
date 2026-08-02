@@ -1,0 +1,13 @@
+@use '../abstracts/mixins' as *;
+
+.section {
+  @include section-spacing();
+}
+
+.section--tight {
+  @include section-spacing(48, 90);
+}
+
+.surface {
+  background: var(--color-surface);
+}

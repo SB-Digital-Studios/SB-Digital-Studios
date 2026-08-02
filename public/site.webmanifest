@@ -1,0 +1,15 @@
+{
+    "name": "SB Digital Studios",
+    "short_name": "SB Digital",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#0f172a",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="120 120 280 360" role="img" aria-labelledby="logo-title logo-desc">
+  <title id="logo-title">SB Digital Studios</title>
+  <desc id="logo-desc">SB monogram logo.</desc>
+  <g fill="none" stroke="#0f172a" stroke-width="25" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 150 H250 C300 150 300 225 250 225 H200 C150 225 150 300 200 300 H300" />
+    <path d="M300 150 V450" stroke-width="20" />
+    <path d="M300 300 C380 300 380 375 300 375 H250" />
+    <path d="M300 375 C380 375 380 450 300 450 H200" />
+  </g>
+</svg>

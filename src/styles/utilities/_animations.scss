@@ -1,0 +1,12 @@
+.reveal {
+  opacity: 0;
+  transform: translateY(1.25rem);
+}
+
+.js-ready .reveal {
+  will-change: transform, opacity;
+}
+
+[data-parallax] {
+  will-change: transform;
+}
