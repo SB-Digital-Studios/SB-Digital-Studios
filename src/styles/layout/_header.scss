@@ -31,7 +31,7 @@
 
 .header__logo-mark {
   display: block;
-  inline-size: 2.5rem;
+  inline-size: clamp(11rem, 9.4rem + 4vw, 14rem);
   block-size: auto;
   object-fit: contain;
 }

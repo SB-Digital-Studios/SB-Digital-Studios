@@ -28,7 +28,7 @@ const STACK = [
   'GSAP',
   'Git',
   'MySQL',
-  'Performance Engineering'
+  'Performance'
 ];
 
 const TESTIMONIALS = [
@@ -39,6 +39,8 @@ const TESTIMONIALS = [
 ];
 
 export function HomePage() {
+  const shouldShowSection = false;
+
   return (
     <>
       <section className="hero" aria-labelledby="hero-title">
@@ -58,9 +60,11 @@ export function HomePage() {
               <a className="button button--primary" href="/contact" data-magnetic>
                 Start My Website
               </a>
+              {shouldShowSection && (
               <a className="button button--ghost" href="/portfolio">
                 See Proof of Work
               </a>
+              )}
             </div>
           </div>
 
@@ -144,76 +148,78 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="portfolio section" id="portfolio" aria-labelledby="portfolio-title">
-        <div className="container">
-          <p className="section-label type-caption">Portfolio</p>
-          <h2 className="section-title type-h1 reveal" id="portfolio-title">
-            Selected projects focused on leads, speed, and clarity.
-          </h2>
-          <div className="portfolio__grid">
-            <article className="project reveal">
-              <img
-                className="project__media"
-                src="/projects/project-1.svg"
-                alt="Luxury interiors website concept"
-                loading="lazy"
-                width="960"
-                height="600"
-              />
-              <div className="project__body">
-                <h3 className="type-h3">Aster &amp; Oak Interiors</h3>
-                <p className="type-body is-muted">
-                  Independent business brand refresh with a clearer offer, premium visuals, and stronger
-                  enquiry flow.
-                </p>
-                <a className="button button--secondary" href="/portfolio">
-                  View Project
-                </a>
-              </div>
-            </article>
-            <article className="project reveal">
-              <img
-                className="project__media"
-                src="/projects/project-2.svg"
-                alt="Ecommerce fashion store concept"
-                loading="lazy"
-                width="960"
-                height="600"
-              />
-              <div className="project__body">
-                <h3 className="type-h3">Northline Apparel</h3>
-                <p className="type-body is-muted">
-                  Ecommerce uplift through improved navigation, product storytelling, and faster
-                  page performance.
-                </p>
-                <a className="button button--secondary" href="/portfolio">
-                  View Project
-                </a>
-              </div>
-            </article>
-            <article className="project reveal">
-              <img
-                className="project__media"
-                src="/projects/project-3.svg"
-                alt="SaaS website concept"
-                loading="lazy"
-                width="960"
-                height="600"
-              />
-              <div className="project__body">
-                <h3 className="type-h3">SignalOps Platform</h3>
-                <p className="type-body is-muted">
-                  Service-led SaaS site with cleaner messaging, improved trust signals, and better
-                  conversion routes.
-                </p>
-                <a className="button button--secondary" href="/portfolio">
-                  View Project
-                </a>
-              </div>
-            </article>
+      {shouldShowSection && (
+        <section className="portfolio section" id="portfolio" aria-labelledby="portfolio-title">
+          <div className="container">
+            <p className="section-label type-caption">Portfolio</p>
+            <h2 className="section-title type-h1 reveal" id="portfolio-title">
+              Selected projects focused on leads, speed, and clarity.
+            </h2>
+            <div className="portfolio__grid">
+              <article className="project reveal">
+                <img
+                  className="project__media"
+                  src="/projects/project-1.svg"
+                  alt="Luxury interiors website concept"
+                  loading="lazy"
+                  width="960"
+                  height="600"
+                />
+                <div className="project__body">
+                  <h3 className="type-h3">Aster &amp; Oak Interiors</h3>
+                  <p className="type-body is-muted">
+                    Independent business brand refresh with a clearer offer, premium visuals, and stronger
+                    enquiry flow.
+                  </p>
+                  <a className="button button--secondary" href="/portfolio">
+                    View Project
+                  </a>
+                </div>
+              </article>
+              <article className="project reveal">
+                <img
+                  className="project__media"
+                  src="/projects/project-2.svg"
+                  alt="Ecommerce fashion store concept"
+                  loading="lazy"
+                  width="960"
+                  height="600"
+                />
+                <div className="project__body">
+                  <h3 className="type-h3">Northline Apparel</h3>
+                  <p className="type-body is-muted">
+                    Ecommerce uplift through improved navigation, product storytelling, and faster
+                    page performance.
+                  </p>
+                  <a className="button button--secondary" href="/portfolio">
+                    View Project
+                  </a>
+                </div>
+              </article>
+              <article className="project reveal">
+                <img
+                  className="project__media"
+                  src="/projects/project-3.svg"
+                  alt="SaaS website concept"
+                  loading="lazy"
+                  width="960"
+                  height="600"
+                />
+                <div className="project__body">
+                  <h3 className="type-h3">SignalOps Platform</h3>
+                  <p className="type-body is-muted">
+                    Service-led SaaS site with cleaner messaging, improved trust signals, and better
+                    conversion routes.
+                  </p>
+                  <a className="button button--secondary" href="/portfolio">
+                    View Project
+                  </a>
+                </div>
+              </article>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section className="process surface" id="process" aria-labelledby="process-title">
         <div className="container">
@@ -248,6 +254,7 @@ export function HomePage() {
         </div>
       </section>
 
+      {shouldShowSection && (
       <section className="testimonials surface" aria-labelledby="testimonials-title">
         <div className="container">
           <p className="section-label type-caption">Testimonials</p>
@@ -266,6 +273,7 @@ export function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       <section className="about section" id="about" aria-labelledby="about-title">
         <div className="container grid grid--2">

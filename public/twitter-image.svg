@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="600" viewBox="0 0 1200 600" role="img" aria-labelledby="title desc">
+  <title id="title">SB Digital Studios</title>
+  <desc id="desc">Default social thumbnail using SB Digital Studios logo.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0A0A0F" />
+      <stop offset="55%" stop-color="#12121A" />
+      <stop offset="100%" stop-color="#1A1A24" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" fill="url(#bg)" />
+  <circle cx="1080" cy="72" r="144" fill="#00D4AA" fill-opacity="0.14" />
+  <circle cx="120" cy="576" r="168" fill="#FF6B4A" fill-opacity="0.16" />
+  <rect x="60" y="72" width="1080" height="456" rx="32" fill="#12121A" stroke="#2A2A35" />
+  <image href="/favicon.svg" x="396" y="132" width="408" height="336" preserveAspectRatio="xMidYMid meet" />
+</svg>
