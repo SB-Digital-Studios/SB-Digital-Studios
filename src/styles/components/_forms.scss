@@ -15,6 +15,7 @@
 
 .form__label {
   @include fluid-type(14, 16, $line: 1.2, $weight: 560);
+  color: var(--color-muted);
 }
 
 .form__input,
@@ -22,7 +23,8 @@
   @include fluid-type(15, 17, $line: 1.4, $weight: 500);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
-  background: #fff;
+  background: var(--color-surface-alt);
+  color: var(--color-text);
   padding: 0.8rem 0.9rem;
 }
 
@@ -33,4 +35,5 @@
 .form__input:focus-visible,
 .form__textarea:focus-visible {
   @include focus-ring;
+  box-shadow: 0 0 0 4px var(--color-border-glow);
 }

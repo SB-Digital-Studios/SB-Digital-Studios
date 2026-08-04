@@ -3,8 +3,10 @@
 
 .page-hero {
   @include section-spacing(72, 120);
-  background: linear-gradient(140deg, #0f172a, #1e3a8a 60%, #2563eb);
-  color: var(--color-surface);
+  background: radial-gradient(circle at 15% 18%, rgba(255, 107, 74, 0.24), transparent 45%),
+    radial-gradient(circle at 78% 8%, rgba(0, 212, 170, 0.14), transparent 42%),
+    linear-gradient(150deg, #0a0a0f 8%, #12121a 58%, #1a1a24);
+  color: var(--color-text);
 }
 
 .page-hero__inner {
@@ -12,9 +14,9 @@
 }
 
 .page-hero .section-label {
-  color: rgba(255, 255, 255, 0.86);
+  color: rgba(245, 245, 247, 0.88);
 }
 
 .page-hero .section-copy {
-  color: rgba(255, 255, 255, 0.84);
+  color: rgba(245, 245, 247, 0.8);
 }
