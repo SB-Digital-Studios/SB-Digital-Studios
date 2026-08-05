@@ -30,6 +30,11 @@ function clean_input(string $value): string
     return trim(str_replace(["\r", "\n"], ' ', $value));
 }
 
+function html_escape(string $value): string
+{
+    return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
 function load_mailer_config(): array
 {
     $config = [];
@@ -50,6 +55,7 @@ function load_mailer_config(): array
         'from_name' => getenv('MAIL_FROM_NAME') ?: null,
         'to_email' => getenv('MAIL_TO_EMAIL') ?: null,
         'to_name' => getenv('MAIL_TO_NAME') ?: null,
+        'logo_url' => getenv('MAIL_LOGO_URL') ?: null,
     ];
 
     foreach ($envConfig as $key => $value) {
@@ -167,6 +173,85 @@ $profiles = $config['smtp_profiles'];
 $lastError = 'Unknown SMTP error.';
 $sent = false;
 
+$submittedAtUtc = gmdate('d F Y H:i') . ' UTC';
+$submittedAtServer = date('d F Y H:i T');
+
+$plainBody = implode(PHP_EOL, [
+    'New contact enquiry received.',
+    '',
+    'Name: ' . $name,
+    'Email: ' . $email,
+    'Service: ' . $service,
+    '',
+    'Project brief:',
+    wordwrap($message, 78, PHP_EOL, true),
+    '',
+    'IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'),
+    'User Agent: ' . ($_SERVER['HTTP_USER_AGENT'] ?? 'unknown'),
+    'Submitted: UTC ' . $submittedAtUtc . ' | Server ' . $submittedAtServer,
+]);
+
+$logoPath = __DIR__ . '/../logo-email.png';
+$logoCid = 'logo-email';
+$logoMarkup = '';
+if (is_file($logoPath)) {
+    $logoMarkup = '<img src="cid:' . $logoCid . '" alt="' . html_escape((string) $config['from_name']) . '" style="max-height:56px; width:auto; margin-bottom:12px;">';
+}
+
+$safeName = html_escape($name);
+$safeEmail = html_escape($email);
+$safeService = html_escape($service);
+$safeMessage = nl2br(html_escape($message));
+$safeIp = html_escape((string) ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+$safeUserAgent = html_escape((string) ($_SERVER['HTTP_USER_AGENT'] ?? 'unknown'));
+$safeSubmittedAtUtc = html_escape($submittedAtUtc);
+$safeSubmittedAtServer = html_escape($submittedAtServer);
+$htmlBody = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin:0;padding:24px;background:#0A0A0F;font-family:Arial,sans-serif;color:#F5F5F7;">'
+    . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:720px;max-width:720px;margin:0 auto;background:#12121A;border:1px solid #2A2A35;border-radius:14px;overflow:hidden;">'
+    . '<tr><td style="padding:24px;border-bottom:1px solid #2A2A35;">'
+    . $logoMarkup
+    . '<h1 style="margin:0;font-size:22px;line-height:1.3;color:#F5F5F7;">New Website Enquiry</h1>'
+    . '<p style="margin:8px 0 0;color:#8E8E93;font-size:14px;">Submitted from sbdigitalstudios.co.uk</p>'
+    . '</td></tr>'
+    . '<tr><td style="padding:24px;">'
+    . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">'
+    . '<tr><td style="padding:8px 0;color:#8E8E93;width:140px;vertical-align:top;">Name</td><td style="padding:8px 0;color:#F5F5F7;">' . $safeName . '</td></tr>'
+    . '<tr><td style="padding:8px 0;color:#8E8E93;width:140px;vertical-align:top;">Email</td><td style="padding:8px 0;color:#F5F5F7;">' . $safeEmail . '</td></tr>'
+    . '<tr><td style="padding:8px 0;color:#8E8E93;width:140px;vertical-align:top;">Service</td><td style="padding:8px 0;color:#F5F5F7;">' . $safeService . '</td></tr>'
+    . '<tr><td style="padding:8px 0;color:#8E8E93;width:140px;vertical-align:top;">Project brief</td><td style="padding:8px 0;color:#F5F5F7;line-height:1.6;word-break:break-word;overflow-wrap:anywhere;white-space:pre-wrap;">' . $safeMessage . '</td></tr>'
+    . '</table>'
+    . '</td></tr>'
+    . '<tr><td style="padding:18px 24px;border-top:1px solid #2A2A35;color:#8E8E93;font-size:12px;line-height:1.5;">'
+    . 'IP: ' . $safeIp . '<br>User Agent: ' . $safeUserAgent
+    . '<div style="margin-top:10px;font-size:11px;line-height:1.4;color:#7A7A84;">'
+    . 'Submitted: UTC ' . $safeSubmittedAtUtc . ' | Server ' . $safeSubmittedAtServer
+    . '</div>'
+    . '</td></tr>'
+    . '</table></body></html>';
+
+$thankYouHtml = '<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head><body style="margin:0;padding:24px;background:#0A0A0F;font-family:Arial,sans-serif;color:#F5F5F7;">'
+    . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:720px;margin:0 auto;background:#12121A;border:1px solid #2A2A35;border-radius:14px;overflow:hidden;">'
+    . '<tr><td style="padding:24px;border-bottom:1px solid #2A2A35;">'
+    . $logoMarkup
+    . '<h1 style="margin:0;font-size:22px;line-height:1.3;color:#F5F5F7;">Thanks for getting in touch</h1>'
+    . '<p style="margin:8px 0 0;color:#8E8E93;font-size:14px;">We have received your message and will reply within 1 business day.</p>'
+    . '</td></tr>'
+    . '<tr><td style="padding:24px;color:#F5F5F7;font-size:15px;line-height:1.7;">'
+    . '<p style="margin:0 0 16px;">Hi ' . $safeName . ',</p>'
+    . '<p style="margin:0 0 16px;">Thanks for contacting SB Digital Studios. We have your ' . $safeService . ' enquiry and will review the details shortly.</p>'
+    . '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:20px 0;border-collapse:separate;border-spacing:0;background:#0F0F14;border:1px solid #2A2A35;border-radius:12px;">'
+    . '<tr><td style="padding:16px 18px;border-bottom:1px solid #2A2A35;color:#8E8E93;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;">What happens next</td></tr>'
+    . '<tr><td style="padding:18px;">'
+    . '<p style="margin:0 0 10px;">1. We review your brief and check the details.</p>'
+    . '<p style="margin:0 0 10px;">2. We reply with next steps or a follow-up question if needed.</p>'
+    . '<p style="margin:0;">3. If it is a fit, we will outline the best approach and timeline.</p>'
+    . '</td></tr>'
+    . '</table>'
+    . '<p style="margin:0 0 18px;">If you need to add anything before we reply, just send a quick follow-up to this email.</p>'
+    . '<p style="margin:0;color:#8E8E93;font-size:13px;line-height:1.6;">Submitted: ' . $safeSubmittedAtUtc . '</p>'
+    . '</td></tr>'
+    . '</table></body></html>';
+
 foreach ($profiles as $profile) {
     $port = (int) ($profile['port'] ?? 0);
     $encryption = strtolower((string) ($profile['encryption'] ?? ''));
@@ -183,21 +268,14 @@ foreach ($profiles as $profile) {
         $mail->setFrom((string) $config['from_email'], (string) $config['from_name']);
         $mail->addAddress((string) $config['to_email'], (string) $config['to_name']);
         $mail->addReplyTo($email, $name);
+        if ($logoMarkup !== '') {
+            $mail->addEmbeddedImage($logoPath, $logoCid, 'logo-email.png');
+        }
 
         $mail->Subject = 'New website enquiry from ' . $name;
-        $mail->Body = implode(PHP_EOL, [
-            'New contact enquiry received.',
-            '',
-            'Name: ' . $name,
-            'Email: ' . $email,
-            'Service: ' . $service,
-            '',
-            'Project brief:',
-            $message,
-            '',
-            'IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'),
-            'User Agent: ' . ($_SERVER['HTTP_USER_AGENT'] ?? 'unknown'),
-        ]);
+        $mail->isHTML(true);
+        $mail->Body = $htmlBody;
+        $mail->AltBody = $plainBody;
 
         $mail->send();
         $sent = true;
@@ -211,19 +289,7 @@ foreach ($profiles as $profile) {
 if (!$sent) {
     if ((bool) $config['mail_fallback'] === true) {
         $subject = 'New website enquiry from ' . $name;
-        $body = implode(PHP_EOL, [
-            'New contact enquiry received.',
-            '',
-            'Name: ' . $name,
-            'Email: ' . $email,
-            'Service: ' . $service,
-            '',
-            'Project brief:',
-            $message,
-            '',
-            'IP: ' . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'),
-            'User Agent: ' . ($_SERVER['HTTP_USER_AGENT'] ?? 'unknown'),
-        ]);
+        $body = $plainBody;
 
         $headers = implode("\r\n", [
             'MIME-Version: 1.0',
@@ -245,6 +311,33 @@ if (!$sent) {
         'code' => 'smtp_failed',
         'message' => 'We could not send your brief right now. Please email hello@sbdigitalstudios.co.uk.'
     ]);
+}
+
+try {
+    $thankYouMail = new PHPMailer(true);
+    configure_mailer($thankYouMail, $config, 587, 'tls');
+    $thankYouMail->setFrom('hello@sbdigitalstudios.co.uk', (string) $config['from_name']);
+    $thankYouMail->addAddress($email, $name);
+    if ($logoMarkup !== '') {
+        $thankYouMail->addEmbeddedImage($logoPath, $logoCid, 'logo-email.png');
+    }
+    $thankYouMail->Subject = 'Thanks for contacting SB Digital Studios';
+    $thankYouMail->isHTML(true);
+    $thankYouMail->Body = $thankYouHtml;
+    $thankYouMail->AltBody = implode(PHP_EOL, [
+        'Thanks for getting in touch',
+        '',
+        'Hi ' . $name . ',',
+        '',
+        'Thanks for contacting SB Digital Studios. We have received your message and will reply within 1 business day.',
+        '',
+        'If you need to add anything before we reply, just send a quick follow-up to this email.',
+        '',
+        'Submitted: UTC ' . $submittedAtUtc,
+    ]);
+    $thankYouMail->send();
+} catch (Exception $exception) {
+    error_log('Contact mailer thank-you error: ' . $exception->getMessage());
 }
 
 respond(200, [

@@ -16,6 +16,9 @@ return [
     'to_email' => 'hello@sbdigitalstudios.co.uk',
     'to_name' => 'SB Digital Studios',
 
+    // Optional absolute URL shown at top of HTML email (e.g. https://sbdigitalstudios.co.uk/logo-email.png)
+    'logo_url' => '',
+
     // SMTP profile: 587 + STARTTLS.
     'smtp_profiles' => [
         ['port' => 587, 'encryption' => 'tls'],
