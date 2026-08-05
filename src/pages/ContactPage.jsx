@@ -56,7 +56,12 @@ export function ContactPage() {
               UK Based, Remote First
             </div>
           </div>
-          <form className="form contact__form reveal" aria-label="Project enquiry form">
+          <form
+            className="form contact__form reveal"
+            aria-label="Project enquiry form"
+            method="post"
+            action="/api/contact.php"
+          >
             <div className="form__field">
               <label className="form__label" htmlFor="name">Name</label>
               <input className="form__input" id="name" name="name" autoComplete="name" required />
@@ -85,6 +90,16 @@ export function ContactPage() {
             <div className="form__field">
               <label className="form__label" htmlFor="message">Project Brief</label>
               <textarea className="form__textarea" id="message" name="message" rows="6" required></textarea>
+            </div>
+            <div className="visually-hidden" aria-hidden="true">
+              <label htmlFor="company_hp">Company</label>
+              <input
+                className="form__input"
+                id="company_hp"
+                name="company_hp"
+                tabIndex="-1"
+                autoComplete="new-password"
+              />
             </div>
             <button className="button button--primary" type="submit" data-magnetic>
               Send Brief
