@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 374 132" role="img" aria-labelledby="logo-title logo-desc">
+  <title id="logo-title">SB Digital Studios</title>
+  <desc id="logo-desc">SB monogram with integrated SB Digital Studios wordmark.</desc>
+  <defs>
+    <linearGradient id="brand-ember" x1="16" y1="12" x2="100" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF8B6E" />
+      <stop offset="1" stop-color="#FF6B4A" />
+    </linearGradient>
+  </defs>
+
+  <rect x="4" y="4" width="124" height="124" rx="24" fill="#12121A" stroke="#2A2A35" stroke-width="2" />
+
+  <g fill="none" stroke="url(#brand-ember)" stroke-linecap="round" stroke-linejoin="round">
+    <path stroke-width="11" d="M24 30 H58 C73 30 73 52 58 52 H42 C27 52 27 74 42 74 H74" />
+    <path stroke-width="9" d="M76 30 V102" />
+    <path stroke-width="9" d="M76 58 H92 C106 58 106 80 92 80 H76" />
+    <path stroke-width="9" d="M76 80 H94 C108 80 108 102 94 102 H44" />
+  </g>
+
+  <g fill="#F5F5F7" font-family="Manrope, Segoe UI, Arial, sans-serif">
+    <text x="156" y="62" font-size="40" font-weight="760" letter-spacing="0.6">SB Digital</text>
+    <text x="158" y="92" font-size="18" font-weight="640" letter-spacing="5.2" fill="#8E8E93">STUDIOS</text>
+  </g>
+</svg>

@@ -114,6 +114,10 @@ export function HomePage() {
           <h2 className="section-title type-h2 reveal" id="coverage-title">
             Local visibility in Kettering, plus reach across the UK.
           </h2>
+          <p className="type-body is-muted reveal">
+            Frequent service areas include Kettering, Corby, Wellingborough, Rushden,
+            Desborough, Burton Latimer, Rothwell, and Northampton.
+          </p>
           <div className="why__grid">
             <article className="card reveal">
               <h3 className="type-h4">Local Search Ready</h3>
@@ -237,7 +241,8 @@ export function HomePage() {
           </div>
         </div>
       </section>
-
+      
+      {shouldShowSection && (
       <section className="stack section" aria-labelledby="stack-title">
         <div className="container">
           <p className="section-label type-caption">Technology Stack</p>
@@ -253,6 +258,7 @@ export function HomePage() {
           </div>
         </div>
       </section>
+      )}
 
       {shouldShowSection && (
       <section className="testimonials surface" aria-labelledby="testimonials-title">
@@ -275,6 +281,7 @@ export function HomePage() {
       </section>
       )}
 
+      {shouldShowSection && (
       <section className="about section" id="about" aria-labelledby="about-title">
         <div className="container grid grid--2">
           <div className="reveal">
@@ -297,6 +304,7 @@ export function HomePage() {
           </aside>
         </div>
       </section>
+      )}
 
       <section className="why surface" aria-labelledby="why-title">
         <div className="container">

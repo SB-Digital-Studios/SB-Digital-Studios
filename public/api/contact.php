@@ -191,7 +191,7 @@ $plainBody = implode(PHP_EOL, [
     'Submitted: UTC ' . $submittedAtUtc . ' | Server ' . $submittedAtServer,
 ]);
 
-$logoPath = __DIR__ . '/../logo-email.png';
+$logoPath = __DIR__ . '/../logo-email.svg';
 $logoCid = 'logo-email';
 $logoMarkup = '';
 if (is_file($logoPath)) {

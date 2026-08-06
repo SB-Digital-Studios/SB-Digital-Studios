@@ -96,7 +96,7 @@ export function Layout({ pathname, children }) {
               <a href="mailto:hello@sbdigitalstudios.co.uk">hello@sbdigitalstudios.co.uk</a>
             </p>
             <p className="type-body">
-              <a href="tel:+441234567890">+44 1234 567 890</a>
+              <a href="tel:++447599284026">+44 7599 284 026</a>
             </p>
           </div>
           <div>
