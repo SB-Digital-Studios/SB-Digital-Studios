@@ -35,6 +35,131 @@ function html_escape(string $value): string
     return htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+function get_project_env_values(): array
+{
+    static $values = null;
+
+    if (is_array($values)) {
+        return $values;
+    }
+
+    $values = [];
+    $path = dirname(__DIR__, 2) . '/.env.local';
+
+    if (!is_file($path) || !is_readable($path)) {
+        return $values;
+    }
+
+    $lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if (!is_array($lines)) {
+        return $values;
+    }
+
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#')) {
+            continue;
+        }
+
+        $parts = explode('=', $line, 2);
+        if (count($parts) !== 2) {
+            continue;
+        }
+
+        $key = trim($parts[0]);
+        $value = trim($parts[1]);
+        if ($key === '') {
+            continue;
+        }
+
+        if ((str_starts_with($value, '"') && str_ends_with($value, '"')) || (str_starts_with($value, "'") && str_ends_with($value, "'"))) {
+            $value = substr($value, 1, -1);
+        }
+
+        $values[$key] = $value;
+    }
+
+    return $values;
+}
+
+function get_project_env_value(string $key): ?string
+{
+    $fromSystem = getenv($key);
+    if (is_string($fromSystem) && $fromSystem !== '') {
+        return $fromSystem;
+    }
+
+    $values = get_project_env_values();
+    if (isset($values[$key]) && $values[$key] !== '') {
+        return $values[$key];
+    }
+
+    return null;
+}
+
+function verify_recaptcha(string $secret, string $token, string $remoteIp): array
+{
+    $payload = [
+        'secret' => $secret,
+        'response' => $token,
+    ];
+
+    if ($remoteIp !== '') {
+        $payload['remoteip'] = $remoteIp;
+    }
+
+    $body = http_build_query($payload);
+    $responseBody = null;
+
+    if (function_exists('curl_init')) {
+        $ch = curl_init('https://www.google.com/recaptcha/api/siteverify');
+        if ($ch !== false) {
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
+            $raw = curl_exec($ch);
+            curl_close($ch);
+            if (is_string($raw) && $raw !== '') {
+                $responseBody = $raw;
+            }
+        }
+    }
+
+    if ($responseBody === null) {
+        $context = stream_context_create([
+            'http' => [
+                'method' => 'POST',
+                'header' => "Content-Type: application/x-www-form-urlencoded\r\n",
+                'content' => $body,
+                'timeout' => 10,
+            ],
+        ]);
+        $raw = @file_get_contents('https://www.google.com/recaptcha/api/siteverify', false, $context);
+        if (is_string($raw) && $raw !== '') {
+            $responseBody = $raw;
+        }
+    }
+
+    if (!is_string($responseBody) || $responseBody === '') {
+        return ['success' => false, 'score' => 0.0, 'action' => '', 'errors' => ['no-response']];
+    }
+
+    $decoded = json_decode($responseBody, true);
+    if (!is_array($decoded)) {
+        return ['success' => false, 'score' => 0.0, 'action' => '', 'errors' => ['invalid-json']];
+    }
+
+    return [
+        'success' => (bool) ($decoded['success'] ?? false),
+        'score' => (float) ($decoded['score'] ?? 0.0),
+        'action' => (string) ($decoded['action'] ?? ''),
+        'errors' => is_array($decoded['error-codes'] ?? null) ? $decoded['error-codes'] : [],
+    ];
+}
+
 function load_mailer_config(): array
 {
     $config = [];
@@ -56,6 +181,9 @@ function load_mailer_config(): array
         'to_email' => getenv('MAIL_TO_EMAIL') ?: null,
         'to_name' => getenv('MAIL_TO_NAME') ?: null,
         'logo_url' => getenv('MAIL_LOGO_URL') ?: null,
+        'recaptcha_secret' => get_project_env_value('RECAPTCHA_SECRET_KEY'),
+        'recaptcha_min_score' => get_project_env_value('RECAPTCHA_MIN_SCORE'),
+        'recaptcha_expected_action' => get_project_env_value('RECAPTCHA_EXPECTED_ACTION'),
     ];
 
     foreach ($envConfig as $key => $value) {
@@ -88,6 +216,14 @@ function load_mailer_config(): array
 
     if (!isset($config['smtp_debug'])) {
         $config['smtp_debug'] = false;
+    }
+
+    if (!isset($config['recaptcha_min_score']) || !is_numeric((string) $config['recaptcha_min_score'])) {
+        $config['recaptcha_min_score'] = 0.5;
+    }
+
+    if (!isset($config['recaptcha_expected_action']) || trim((string) $config['recaptcha_expected_action']) === '') {
+        $config['recaptcha_expected_action'] = 'contact_form_submit';
     }
 
     return $config;
@@ -166,6 +302,32 @@ foreach ($requiredKeys as $key) {
             'ok' => false,
             'message' => 'Mailer is not configured yet. Add your SMTP settings before using the form.'
         ]);
+    }
+}
+
+$recaptchaSecret = trim((string) ($config['recaptcha_secret'] ?? ''));
+if ($recaptchaSecret !== '') {
+    $recaptchaToken = trim((string) ($_POST['recaptcha_token'] ?? ''));
+    if ($recaptchaToken === '') {
+        respond(422, ['ok' => false, 'message' => 'Security check failed. Please refresh and try again.']);
+    }
+
+    $recaptchaResult = verify_recaptcha(
+        $recaptchaSecret,
+        $recaptchaToken,
+        (string) ($_SERVER['REMOTE_ADDR'] ?? '')
+    );
+
+    $recaptchaMinScore = (float) $config['recaptcha_min_score'];
+    $recaptchaExpectedAction = trim((string) $config['recaptcha_expected_action']);
+    $recaptchaAction = (string) ($recaptchaResult['action'] ?? '');
+    $recaptchaPassed = (bool) ($recaptchaResult['success'] ?? false)
+        && (float) ($recaptchaResult['score'] ?? 0.0) >= $recaptchaMinScore
+        && $recaptchaAction === $recaptchaExpectedAction;
+
+    if (!$recaptchaPassed) {
+        error_log('Contact reCAPTCHA blocked: ' . json_encode($recaptchaResult));
+        respond(422, ['ok' => false, 'message' => 'Security check failed. Please refresh and try again.']);
     }
 }
 

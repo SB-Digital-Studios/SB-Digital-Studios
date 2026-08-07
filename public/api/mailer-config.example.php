@@ -19,6 +19,12 @@ return [
     // Optional absolute URL shown at top of HTML email (e.g. https://sbdigitalstudios.co.uk/logo-email.png)
     'logo_url' => '',
 
+    // Optional: reCAPTCHA v3 server-side verification.
+    // Recommended source is RECAPTCHA_SECRET_KEY in .env.local on the web server.
+    'recaptcha_secret' => '',
+    'recaptcha_min_score' => 0.5,
+    'recaptcha_expected_action' => 'contact_form_submit',
+
     // SMTP profile: 587 + STARTTLS.
     'smtp_profiles' => [
         ['port' => 587, 'encryption' => 'tls'],

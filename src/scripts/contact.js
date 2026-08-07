@@ -1,5 +1,36 @@
 import { qs } from './utils.js';
 
+const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+let recaptchaReadyPromise;
+
+function loadRecaptcha(siteKey) {
+  if (!siteKey) return null;
+  if (recaptchaReadyPromise) return recaptchaReadyPromise;
+
+  recaptchaReadyPromise = new Promise((resolve, reject) => {
+    if (window.grecaptcha) {
+      window.grecaptcha.ready(resolve);
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(siteKey)}`;
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      if (!window.grecaptcha) {
+        reject(new Error('reCAPTCHA failed to initialize.'));
+        return;
+      }
+      window.grecaptcha.ready(resolve);
+    };
+    script.onerror = () => reject(new Error('reCAPTCHA could not be loaded.'));
+    document.head.appendChild(script);
+  });
+
+  return recaptchaReadyPromise;
+}
+
 export function initContactForm() {
   const form = qs('.contact__form');
   if (!form) return;
@@ -17,7 +48,19 @@ export function initContactForm() {
     }
 
     try {
+      if (recaptchaSiteKey) {
+        await loadRecaptcha(recaptchaSiteKey);
+      }
+
       const formData = new FormData(form);
+
+      if (recaptchaSiteKey) {
+        const token = await window.grecaptcha.execute(recaptchaSiteKey, {
+          action: 'contact_form_submit'
+        });
+        formData.set('recaptcha_token', token);
+      }
+
       const response = await fetch(form.getAttribute('action') || '/api/contact.php', {
         method: 'POST',
         body: formData,
