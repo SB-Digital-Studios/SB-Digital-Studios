@@ -10,8 +10,17 @@
     </linearGradient>
   </defs>
   <rect width="1200" height="600" fill="url(#bg)" />
-  <circle cx="1080" cy="72" r="144" fill="#00D4AA" fill-opacity="0.14" />
-  <circle cx="120" cy="576" r="168" fill="#FF6B4A" fill-opacity="0.16" />
-  <rect x="60" y="72" width="1080" height="456" rx="32" fill="#12121A" stroke="#2A2A35" />
-  <image href="/favicon.svg" x="396" y="132" width="408" height="336" preserveAspectRatio="xMidYMid meet" />
+  <circle cx="1080" cy="72" r="144" fill="#00D4AA" fill-opacity="0.16" />
+  <circle cx="120" cy="576" r="168" fill="#FF6B4A" fill-opacity="0.18" />
+  <rect x="60" y="72" width="1080" height="456" rx="34" fill="#0F1118" stroke="#2B2D3A" stroke-width="2" />
+  <rect x="92" y="104" width="390" height="392" rx="28" fill="#171924" />
+  <rect x="528" y="118" width="560" height="120" rx="24" fill="#10131A" stroke="#2F3340" />
+  <rect x="528" y="258" width="560" height="220" rx="24" fill="#10131A" stroke="#2F3340" />
+  <image href="/favicon.svg" x="150" y="150" width="270" height="220" preserveAspectRatio="xMidYMid meet" />
+  <text x="568" y="172" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="700" fill="#F7F8FA">SB Digital Studios</text>
+  <text x="568" y="214" font-family="Inter, Arial, sans-serif" font-size="22" fill="#7C849B">Independent digital studio</text>
+  <text x="568" y="320" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#F7F8FA">Web design</text>
+  <text x="568" y="358" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#F7F8FA">Branding</text>
+  <text x="568" y="396" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="600" fill="#F7F8FA">Digital growth</text>
+  <text x="568" y="442" font-family="Inter, Arial, sans-serif" font-size="18" fill="#9CA3AF">Modern websites, bold brands, and growth strategy.</text>
 </svg>
