@@ -21,6 +21,8 @@ const PROCESS = [
 const STACK = ['WordPress', 'WooCommerce', 'PHP', 'JavaScript', 'SCSS', 'Vite', 'GSAP', 'Git', 'MySQL'];
 
 export function ServicesPage() {
+  const showTechnologySection = false;
+
   return (
     <>
       <section className="page-hero">
@@ -63,19 +65,21 @@ export function ServicesPage() {
         </div>
       </section>
 
-      <section className="stack surface">
-        <div className="container">
-          <p className="section-label type-caption">Technology</p>
-          <h2 className="section-title type-h1 reveal">Tooling chosen for reliability, speed, and maintainability.</h2>
-          <div className="stack__grid">
-            {STACK.map((item) => (
-              <article className="card reveal" key={item}>
-                <p className="type-h4">{item}</p>
-              </article>
-            ))}
+      {showTechnologySection && (
+        <section className="stack surface">
+          <div className="container">
+            <p className="section-label type-caption">Technology</p>
+            <h2 className="section-title type-h1 reveal">Tooling chosen for reliability, speed, and maintainability.</h2>
+            <div className="stack__grid">
+              {STACK.map((item) => (
+                <article className="card reveal" key={item}>
+                  <p className="type-h4">{item}</p>
+                </article>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

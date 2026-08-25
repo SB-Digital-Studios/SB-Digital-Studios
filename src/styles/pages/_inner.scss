@@ -20,3 +20,74 @@
 .page-hero .section-copy {
   color: rgba(245, 245, 247, 0.8);
 }
+
+.services,
+.process,
+.stack {
+  @include section-spacing();
+}
+
+.why {
+  @include section-spacing();
+}
+
+.why__grid {
+  max-width: 76rem;
+  margin-inline: auto;
+  display: grid;
+  gap: fluid-space(16, 24);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+.why__grid .card {
+  min-height: auto;
+  padding: fluid-space(16, 24);
+}
+
+.services .card-grid {
+  max-width: 82rem;
+  margin-inline: auto;
+  margin-top: fluid-space(10, 20);
+  gap: fluid-space(20, 34);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.services .card {
+  min-height: auto;
+  padding: fluid-space(18, 28);
+}
+
+.services .card .type-h4 {
+  margin-bottom: fluid-space(8, 14);
+}
+
+.stack__grid {
+  max-width: 82rem;
+  margin-inline: auto;
+  display: grid;
+  gap: fluid-space(16, 24);
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  align-items: start;
+}
+
+.stack__grid .card {
+  min-height: auto;
+  padding: fluid-space(14, 20);
+}
+
+@media (max-width: 64rem) {
+  .services .card-grid,
+  .why__grid,
+  .stack__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 40rem) {
+  .services .card-grid,
+  .why__grid,
+  .stack__grid {
+    grid-template-columns: 1fr;
+  }
+}

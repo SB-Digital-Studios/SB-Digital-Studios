@@ -7,7 +7,7 @@ const NAV_ITEMS = [
 
 const FOOTER_ITEMS = [
   { label: 'Services', href: '/services' },
-  { label: 'Portfolio', href: '/portfolio' },
+  // { label: 'Portfolio', href: '/portfolio' },
   { label: 'Contact', href: '/contact' }
 ];
 
@@ -103,11 +103,11 @@ export function Layout({ pathname, children }) {
             <h2 className="type-h4">Social</h2>
             <ul className="type-body">
               <li>
-                <a href="#" aria-label="LinkedIn">
+                <a href="https://www.linkedin.com/company/137054692/admin/dashboard/" aria-label="LinkedIn">
                   LinkedIn
                 </a>
               </li>
-              <li>
+              {/* <li>
                 <a href="#" aria-label="Behance">
                   Behance
                 </a>
@@ -116,7 +116,7 @@ export function Layout({ pathname, children }) {
                 <a href="#" aria-label="Dribbble">
                   Dribbble
                 </a>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>

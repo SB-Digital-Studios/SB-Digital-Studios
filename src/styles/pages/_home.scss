@@ -2,7 +2,7 @@
 @use '../abstracts/mixins' as *;
 
 .hero {
-  @include section-spacing(80, 180);
+  @include section-spacing(90, 190);
   background: var(--gradient-hero);
   color: var(--color-text);
   overflow: hidden;
@@ -11,24 +11,28 @@
 .hero__grid {
   @include fluid-container();
   display: grid;
-  gap: fluid-space(28, 70);
+  gap: fluid-space(26, 64);
   align-items: center;
-  grid-template-columns: 1.2fr 1fr;
+  grid-template-columns: 1.1fr 0.9fr;
+}
+
+.hero__content {
+  max-width: 44rem;
 }
 
 .hero__eyebrow {
-  margin-bottom: fluid-space(20, 34);
+  margin-bottom: fluid-space(16, 28);
 }
 
 .hero__title {
-  @include fluid-type(40, 72, $line: 0.98, $weight: 760);
-  max-width: 11ch;
+  @include fluid-type(42, 76, $line: 1.02, $weight: 760);
+  max-width: 12ch;
   margin-bottom: fluid-space(16, 28);
 }
 
 .hero__subtitle {
-  @include fluid-type(20, 28, $line: 1.5, $weight: 500);
-  max-width: 44ch;
+  @include fluid-type(18, 24, $line: 1.6, $weight: 500);
+  max-width: 48ch;
   margin-bottom: fluid-space(18, 32);
   color: rgba(245, 245, 247, 0.88);
 }
@@ -41,9 +45,37 @@
 
 .hero__panel {
   @include panel;
-  background: rgba(18, 18, 26, 0.9);
+  background: rgba(16, 16, 24, 0.9);
   color: var(--color-text);
-  padding: fluid-space(16, 30);
+  padding: fluid-space(18, 30);
+}
+
+.hero__results {
+  display: grid;
+  gap: 0.8rem;
+  margin-block: fluid-space(12, 18) fluid-space(16, 22);
+}
+
+.hero__result {
+  border: 1px solid rgba(245, 245, 247, 0.1);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hero__trust {
+  margin-top: fluid-space(18, 24);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.hero__trust li {
+  border: 1px solid rgba(245, 245, 247, 0.14);
+  border-radius: var(--radius-pill);
+  padding: 0.45rem 0.85rem;
+  color: rgba(245, 245, 247, 0.86);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .hero__shape {
@@ -56,7 +88,7 @@
 .hero__shape--a {
   width: fluid-space(200, 380);
   height: fluid-space(200, 380);
-  background: rgba(255, 107, 74, 0.32);
+  background: rgba(255, 107, 74, 0.24);
   top: -8%;
   right: -8%;
 }
@@ -64,49 +96,40 @@
 .hero__shape--b {
   width: fluid-space(160, 320);
   height: fluid-space(160, 320);
-  background: rgba(0, 212, 170, 0.28);
+  background: rgba(0, 212, 170, 0.2);
   bottom: -10%;
   left: -8%;
 }
 
-.stats,
+.proof,
 .services,
-.portfolio,
 .process,
-.stack,
-.testimonials,
 .about,
-.why,
-.faq,
 .contact {
   @include section-spacing();
 }
 
-.stats__grid,
-.why__grid,
-.stack__grid {
+.proof__grid,
+.services__grid {
   display: grid;
-  gap: fluid-space(16, 28);
+  gap: fluid-space(16, 24);
 }
 
-.stats__grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-.why__grid {
-  max-width: 76rem;
+.proof__grid {
   margin-inline: auto;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.stack__grid {
-  max-width: 82rem;
-  margin-inline: auto;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+.proof__card {
+  padding: fluid-space(18, 24);
+}
+
+.proof__card .type-body {
+  margin-bottom: 0.9rem;
 }
 
 .process__timeline {
-  max-width: 76rem;
+  max-width: 70rem;
   margin-inline: auto;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -118,7 +141,7 @@
   padding: fluid-space(18, 26);
 }
 
-.services .card-grid {
+.services__grid {
   max-width: 82rem;
   margin-inline: auto;
   margin-top: fluid-space(10, 20);
@@ -126,59 +149,85 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.services .card {
+.services__grid .card {
   padding: fluid-space(18, 28);
 }
 
-.services .card .type-h4 {
+.services__grid .card .type-h4 {
   margin-bottom: fluid-space(8, 14);
 }
 
-.portfolio__grid {
+.services__list {
+  margin-top: 1rem;
   display: grid;
-  gap: fluid-space(16, 24);
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 0.45rem;
+  color: rgba(245, 245, 247, 0.88);
 }
 
-.project {
-  @include panel;
-  overflow: hidden;
+.services__list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
 }
 
-.project__media {
-  aspect-ratio: 16 / 10;
-  background: var(--gradient-card);
+.services__list li::before {
+  content: '';
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--color-highlight);
+  box-shadow: 0 0 0 5px rgba(0, 212, 170, 0.14);
 }
 
-.project__body {
-  padding: fluid-space(14, 20);
+.about__grid {
+  display: grid;
+  gap: fluid-space(18, 30);
+  grid-template-columns: 1fr 0.9fr;
 }
 
-.testimonials__slider {
-  padding-block: 0.25rem 0.5rem;
+.about__panel {
+  padding: fluid-space(18, 28);
 }
 
-.testimonials__card {
-  @include panel;
-  min-height: 100%;
-  padding: fluid-space(16, 28);
+.about__list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.about__list li {
+  padding-left: 1rem;
+  position: relative;
+}
+
+.about__list li::before {
+  content: '';
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
 }
 
 .contact__grid {
   display: grid;
   gap: fluid-space(16, 26);
   grid-template-columns: 1.1fr 1fr;
+  align-items: start;
 }
 
-.contact__map {
-  @include panel;
-  min-height: 22rem;
-  background: radial-gradient(circle at 30% 20%, rgba(255, 107, 74, 0.2), transparent 52%),
-    radial-gradient(circle at 80% 18%, rgba(0, 212, 170, 0.14), transparent 50%),
-    #1a1a24;
+.contact__details {
+  margin-top: fluid-space(14, 20);
+  padding: fluid-space(18, 24);
+  min-height: auto;
+}
+
+.contact__steps {
+  margin-top: 0.75rem;
   display: grid;
-  place-content: center;
-  color: var(--color-text);
+  gap: 0.65rem;
 }
 
 .cursor {
@@ -196,25 +245,30 @@
 
 @media (max-width: 64rem) {
   .hero__grid,
+  .about__grid,
   .contact__grid {
     grid-template-columns: 1fr;
   }
 
-  .stats__grid,
-  .why__grid,
-  .stack__grid,
+  .proof__grid,
   .process__timeline,
-  .services .card-grid {
+  .services__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 40rem) {
-  .stats__grid,
-  .why__grid,
-  .stack__grid,
+  .proof__grid,
   .process__timeline,
-  .services .card-grid {
+  .services__grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero__title {
+    max-width: 14ch;
+  }
+
+  .hero__trust {
+    gap: 0.5rem;
   }
 }
