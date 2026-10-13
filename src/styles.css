@@ -1,0 +1,181 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+@import "@fontsource-variable/manrope";
+@import "@fontsource-variable/bricolage-grotesque";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * SB Digital Studios design system.
+ * Ink-black canvas, ember (brand orange) primary, mint highlight.
+ * Display: Bricolage Grotesque. Body: Manrope (both self-hosted).
+ */
+
+@theme inline {
+  --font-sans: "Manrope Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "Manrope Variable", sans-serif;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
+  --color-surface: var(--surface);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 1rem;
+  --background: oklch(0.14 0.008 285);
+  --foreground: oklch(0.97 0.003 285);
+  --surface: oklch(0.18 0.01 285);
+  --card: oklch(0.2 0.012 285);
+  --card-foreground: oklch(0.97 0.003 285);
+  --popover: oklch(0.2 0.012 285);
+  --popover-foreground: oklch(0.97 0.003 285);
+  --primary: oklch(0.7 0.19 35);
+  --primary-foreground: oklch(0.14 0.008 285);
+  --secondary: oklch(0.25 0.014 285);
+  --secondary-foreground: oklch(0.97 0.003 285);
+  --muted: oklch(0.25 0.014 285);
+  --muted-foreground: oklch(0.68 0.01 285);
+  --accent: oklch(0.28 0.02 285);
+  --accent-foreground: oklch(0.97 0.003 285);
+  --highlight: oklch(0.78 0.15 172);
+  --highlight-foreground: oklch(0.14 0.008 285);
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: oklch(0.97 0.003 285);
+  --border: oklch(0.3 0.015 285);
+  --input: oklch(0.32 0.015 285);
+  --ring: oklch(0.7 0.19 35);
+  --chart-1: oklch(0.7 0.19 35);
+  --chart-2: oklch(0.78 0.15 172);
+  --chart-3: oklch(0.6 0.1 250);
+  --chart-4: oklch(0.82 0.15 85);
+  --chart-5: oklch(0.65 0.2 15);
+  --sidebar: oklch(0.18 0.01 285);
+  --sidebar-foreground: oklch(0.97 0.003 285);
+  --sidebar-primary: oklch(0.7 0.19 35);
+  --sidebar-primary-foreground: oklch(0.14 0.008 285);
+  --sidebar-accent: oklch(0.25 0.014 285);
+  --sidebar-accent-foreground: oklch(0.97 0.003 285);
+  --sidebar-border: oklch(0.3 0.015 285);
+  --sidebar-ring: oklch(0.7 0.19 35);
+
+  --gradient-ember: linear-gradient(135deg, oklch(0.76 0.16 40), oklch(0.66 0.21 32));
+  --gradient-glow: radial-gradient(60% 60% at 70% 20%, oklch(0.7 0.19 35 / 0.22), transparent 70%),
+    radial-gradient(50% 50% at 10% 90%, oklch(0.78 0.15 172 / 0.12), transparent 70%);
+  --shadow-ember: 0 20px 60px -20px oklch(0.7 0.19 35 / 0.55);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+  }
+}
+
+@utility text-ember {
+  background: var(--gradient-ember);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@utility bg-ember {
+  background: var(--gradient-ember);
+}
+@utility bg-glow {
+  background-image: var(--gradient-glow);
+}
+@utility shadow-ember {
+  box-shadow: var(--shadow-ember);
+}
+@utility container-site {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 76rem;
+  padding-inline: 1.25rem;
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+}
+@utility prose-legal {
+  & h2 {
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  & h3 {
+    font-size: 1.15rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  & p,
+  & li {
+    color: var(--color-muted-foreground);
+    line-height: 1.75;
+  }
+  & p {
+    margin-bottom: 1rem;
+  }
+  & ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  & a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+}
