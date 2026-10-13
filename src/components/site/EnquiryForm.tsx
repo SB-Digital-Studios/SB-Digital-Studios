@@ -83,18 +83,19 @@ export function EnquiryForm({ source, compact, defaultService }: { source: strin
     mailFd.set("message", `${d.message}${d.phone ? `\n\nPhone: ${d.phone}` : ""}\n\nSent from: ${source}`);
     mailFd.set("company_hp", (fd.get("company_hp") as string) ?? "");
 
-    const [mail, db] = await Promise.allSettled([
-      sendViaMailer(mailFd),
-      supabase.from("enquiries").insert({
-        name: d.name,
-        email: d.email,
-        phone: d.phone ?? null,
-        service: d.service,
-        message: d.message,
-        consent: d.consent,
-        source_page: source,
-      }),
-    ]);
+    const dbInsert = supabase
+      ? supabase.from("enquiries").insert({
+          name: d.name,
+          email: d.email,
+          phone: d.phone ?? null,
+          service: d.service,
+          message: d.message,
+          consent: d.consent,
+          source_page: source,
+        })
+      : Promise.resolve({ error: null });
+
+    const [mail, db] = await Promise.allSettled([sendViaMailer(mailFd), dbInsert]);
 
     const mailed = mail.status === "fulfilled" && mail.value.ok;
     const stored = db.status === "fulfilled" && !db.value.error;
