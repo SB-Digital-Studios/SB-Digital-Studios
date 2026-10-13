@@ -1,0 +1,1 @@
+import{n as e,x as t}from"./index-B_PBXzZJ.js";import{t as n}from"./LocationPage-BsHyKi6l.js";var r=t(),i=()=>(0,r.jsx)(n,{c:e});export{i as component};
