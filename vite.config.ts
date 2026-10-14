@@ -5,5 +5,5 @@ import tailwindcss from "@tailwindcss/vite";
 import tsConfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [tsConfigPaths(), tailwindcss(), tanstackStart({ server: { entry: "server" } }), viteReact()],
+  plugins: [tsConfigPaths(), tailwindcss(), tanstackStart({ server: { entry: "server" }, prerender: { enabled: true, crawlLinks: true, failOnError: true }, pages: [{ path: "/sitemap.xml" }] }), viteReact()],
 });
