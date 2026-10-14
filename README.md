@@ -16,7 +16,8 @@ pay-monthly plans (billed monthly or every 2 months).
 - **Contact form:** `src/components/site/EnquiryForm.tsx` POSTs to
   `/api/contact.php` (PHPMailer, honeypot field, optional reCAPTCHA v3). A backup copy
   of each enquiry is also inserted into the database (`enquiries` table, insert-only,
-  consent required). The form reports success if either succeeds.
+  consent required). The form reports success only when the email send succeeds; the
+  database insert is best-effort logging.
 - **SEO:** each route sets its own title, description, canonical URL and Open Graph
   tags (`src/lib/site/seo.ts`). Location and service pages include LocalBusiness,
   Service and Breadcrumb JSON-LD. `/sitemap.xml` is generated from the routes and
@@ -26,15 +27,15 @@ pay-monthly plans (billed monthly or every 2 months).
 
 ## Project layout
 
-| Path | What it is |
-| --- | --- |
-| `src/routes/` | One file per page (`index.tsx` = home, `services.$slug.tsx` = each service, area pages, legal pages, `sitemap[.]xml.tsx`) |
-| `src/routes/__root.tsx` | Site shell: header, footer, cookie banner, global head tags |
-| `src/lib/site/data.ts` | **All content**: business details, services, plans and prices, FAQs, comparison table |
-| `src/lib/site/seo.ts` | SEO helpers and structured data |
-| `src/components/site/` | Header, footer, enquiry form, shared blocks, `LocationPage.tsx` template for area pages |
-| `src/styles.css` | Design tokens (colours, fonts) and utilities |
-| `public/` | Copied as-is into the build: images, robots.txt, `.htaccess`, `api/` (PHP mailer) |
+| Path                    | What it is                                                                                                                |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `src/routes/`           | One file per page (`index.tsx` = home, `services.$slug.tsx` = each service, area pages, legal pages, `sitemap[.]xml.tsx`) |
+| `src/routes/__root.tsx` | Site shell: header, footer, cookie banner, global head tags                                                               |
+| `src/lib/site/data.ts`  | **All content**: business details, services, plans and prices, FAQs, comparison table                                     |
+| `src/lib/site/seo.ts`   | SEO helpers and structured data                                                                                           |
+| `src/components/site/`  | Header, footer, enquiry form, shared blocks, `LocationPage.tsx` template for area pages                                   |
+| `src/styles.css`        | Design tokens (colours, fonts) and utilities                                                                              |
+| `public/`               | Copied as-is into the build: images, robots.txt, `.htaccess`, `api/` (PHP mailer)                                         |
 
 ## Run locally
 

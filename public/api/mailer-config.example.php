@@ -3,8 +3,8 @@
 declare(strict_types=1);
 
 return [
-    // HeartInternet SMTP host
-    'host' => 'mail.extendcp.co.uk',
+    // Primary SMTP host (mailbox domain endpoint)
+    'host' => 'mail.sbdigitalstudios.co.uk',
 
     // Password-based authentication
     'username' => 'hello@sbdigitalstudios.co.uk',
@@ -16,18 +16,10 @@ return [
     'to_email' => 'hello@sbdigitalstudios.co.uk',
     'to_name' => 'SB Digital Studios',
 
-    // Optional absolute URL shown at top of HTML email (e.g. https://sbdigitalstudios.co.uk/logo-email.png)
-    'logo_url' => '',
-
-    // Optional: reCAPTCHA v3 server-side verification.
-    // Recommended source is RECAPTCHA_SECRET_KEY in .env.local on the web server.
-    'recaptcha_secret' => '',
-    'recaptcha_min_score' => 0.5,
-    'recaptcha_expected_action' => 'contact_form_submit',
-
-    // SMTP profile: 587 + STARTTLS.
+    // SMTP profiles are tried in order: STARTTLS first, then SMTPS fallback.
     'smtp_profiles' => [
         ['port' => 587, 'encryption' => 'tls'],
+        ['port' => 465, 'encryption' => 'ssl'],
     ],
 
     // TLS certificate checks (set allow_self_signed true only if host support confirms it)
@@ -41,4 +33,10 @@ return [
 
     // Set true temporarily if you want detailed SMTP diagnostics in php.error.log.
     'smtp_debug' => false,
+
+    // Optional reCAPTCHA v3 server-side verification.
+    // Leave blank/omit to disable verification.
+    // 'recaptcha_secret' => 'replace-with-recaptcha-secret',
+    // 'recaptcha_action' => 'contact_form_submit',
+    // 'recaptcha_min_score' => 0.5,
 ];

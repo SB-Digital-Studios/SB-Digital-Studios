@@ -14,7 +14,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.*)$ /$1.html [L]
 
-<FilesMatch "mailer-config\.php$">
+<FilesMatch "mailer-config(\.local)?\.php$">
   Require all denied
 </FilesMatch>
 <IfModule mod_expires.c>

@@ -1,7 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
 import { enquiryOptions } from "@/lib/site/data";
 import { cta } from "./ui";
 
@@ -25,6 +24,12 @@ declare global {
   }
 }
 
+type MailerResponse = {
+  ok: boolean;
+  message?: string | undefined;
+  detail?: string | undefined;
+};
+
 function loadRecaptcha(key: string): Promise<void> {
   if (window.grecaptcha) return new Promise((r) => window.grecaptcha!.ready(r));
   return new Promise((resolve, reject) => {
@@ -37,15 +42,25 @@ function loadRecaptcha(key: string): Promise<void> {
   });
 }
 
-async function sendViaMailer(fd: FormData): Promise<{ ok: boolean; message?: string | undefined }> {
+async function sendViaMailer(fd: FormData): Promise<MailerResponse> {
   if (RECAPTCHA_SITE_KEY) {
     await loadRecaptcha(RECAPTCHA_SITE_KEY);
     const token = await window.grecaptcha!.execute(RECAPTCHA_SITE_KEY, { action: "contact_form_submit" });
     fd.set("recaptcha_token", token);
   }
+
   const res = await fetch(CONTACT_ENDPOINT, { method: "POST", body: fd, headers: { Accept: "application/json" } });
-  const payload = (await res.json().catch(() => null)) as { ok?: boolean; message?: string } | null;
-  return { ok: res.ok && !!payload?.ok, message: payload?.message };
+  const payload = (await res.json().catch(() => null)) as { ok?: boolean; message?: string; detail?: string } | null;
+
+  if (!res.ok || !payload?.ok) {
+    return {
+      ok: false,
+      message: payload?.message,
+      detail: payload?.detail,
+    };
+  }
+
+  return { ok: true, message: payload.message };
 }
 
 const field =
@@ -59,6 +74,7 @@ export function EnquiryForm({ source, compact, defaultService }: { source: strin
     e.preventDefault();
     const form = e.currentTarget;
     const fd = new FormData(form);
+
     const parsed = schema.safeParse({
       name: fd.get("name"),
       email: fd.get("email"),
@@ -67,45 +83,47 @@ export function EnquiryForm({ source, compact, defaultService }: { source: strin
       message: fd.get("message") ?? "",
       consent: fd.get("consent") === "on",
     });
+
     if (!parsed.success) {
       setError(parsed.error.issues[0]?.message ?? "Please check the form.");
       return;
     }
+
     setError(null);
     setState("sending");
-    const d = parsed.data;
 
-    // Include phone and source page in the emailed message (the mailer has no separate fields for them).
-    const mailFd = new FormData();
-    mailFd.set("name", d.name);
-    mailFd.set("email", d.email);
-    mailFd.set("service", d.service);
-    mailFd.set("message", `${d.message}${d.phone ? `\n\nPhone: ${d.phone}` : ""}\n\nSent from: ${source}`);
-    mailFd.set("company_hp", (fd.get("company_hp") as string) ?? "");
+    try {
+      const d = parsed.data;
 
-    const dbInsert = supabase
-      ? supabase.from("enquiries").insert({
-          name: d.name,
-          email: d.email,
-          phone: d.phone ?? null,
-          service: d.service,
-          message: d.message,
-          consent: d.consent,
-          source_page: source,
-        })
-      : Promise.resolve({ error: null });
+      // Include phone and source page in the emailed message (the mailer has no separate fields for them).
+      const mailFd = new FormData();
+      mailFd.set("name", d.name);
+      mailFd.set("email", d.email);
+      mailFd.set("service", d.service);
+      mailFd.set("message", `${d.message}${d.phone ? `\n\nPhone: ${d.phone}` : ""}\n\nSent from: ${source}`);
+      mailFd.set("company_hp", (fd.get("company_hp") as string) ?? "");
 
-    const [mail, db] = await Promise.allSettled([sendViaMailer(mailFd), dbInsert]);
+      const mail = await sendViaMailer(mailFd);
+      if (!mail.ok) {
+        setState("idle");
+        const message = mail.message;
+        const detail = mail.detail;
+        setError(
+          detail
+            ? `${message ?? "Sorry, that didn't send."} ${detail}`
+            : message || "Sorry, that didn't send. Please email hello@sbdigitalstudios.co.uk instead.",
+        );
+        return;
+      }
 
-    const mailed = mail.status === "fulfilled" && mail.value.ok;
-    const stored = db.status === "fulfilled" && !db.value.error;
-    if (!mailed && !stored) {
+      form.reset();
+      setState("done");
+      setError(null);
+    } catch (err) {
+      console.error(err);
       setState("idle");
-      const msg = mail.status === "fulfilled" ? mail.value.message : undefined;
-      setError(msg || "Sorry, that didn't send. Please email hello@sbdigitalstudios.co.uk instead.");
-      return;
+      setError("Sorry, that didn't send. Please email hello@sbdigitalstudios.co.uk instead.");
     }
-    setState("done");
   }
 
   if (state === "done") {
@@ -126,7 +144,7 @@ export function EnquiryForm({ source, compact, defaultService }: { source: strin
       <div className="grid gap-3 sm:grid-cols-2">
         <input name="phone" type="tel" placeholder="Phone (optional)" aria-label="Phone" className={field} maxLength={30} />
         <select name="service" aria-label="I'm looking for" defaultValue={defaultService ?? ""} className={field} required>
-          <option value="">I'm looking for…</option>
+          <option value="">I'm looking for...</option>
           {enquiryOptions.map((o) => (
             <option key={o}>{o}</option>
           ))}
@@ -144,7 +162,7 @@ export function EnquiryForm({ source, compact, defaultService }: { source: strin
       </label>
       {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
       <button type="submit" disabled={state === "sending"} className={cta({ size: "lg" }) + " w-full"}>
-        {state === "sending" ? "Sending…" : "Book my free call"}
+        {state === "sending" ? "Sending..." : "Book my free call"}
       </button>
     </form>
   );

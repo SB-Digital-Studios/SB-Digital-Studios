@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "build:ftp": "vite build && rm -rf ftp-upload && cp -r dist/client ftp-upload"
+    "build:ftp": "vite build && node scripts/prepare-ftp-build.mjs"
   },
   "overrides": {
     "rolldown": "1.2.1"
